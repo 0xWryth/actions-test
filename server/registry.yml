@@ -1,0 +1,25 @@
+version: "3"
+services:
+  registry:
+      image: registry:2
+      ports:
+        - 5000:5000
+      environment:
+        # Setting SSL certificate
+        - REGISTRY_HTTP_TLS_CERTIFICATE=/cert/fullchain.pem
+        - REGISTRY_HTTP_TLS_KEY=/cert/privkey.pem
+        # Authentication is set to htpasswd
+        # Do not use authentication without a SSL certificate
+        - REGISTRY_AUTH=htpasswd
+        - REGISTRY_AUTH_HTPASSWD_REALM=Registry Realm
+        - REGISTRY_AUTH_HTPASSWD_PATH=/auth/.htpasswd
+        # Setting up storage directory
+        - REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY=/data
+      restart: unless-stopped
+      volumes:
+        # SSL certificate root
+        - ./cert:/cert
+        # htpasswd authentication directory 
+        - ./auth:/auth
+        # Storage directory
+        - ./data:/data
