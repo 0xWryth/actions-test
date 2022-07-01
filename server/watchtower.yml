@@ -1,0 +1,17 @@
+version: "3"
+services:
+  watchtower:
+    image: containrrr/watchtower
+    container_name: watchtower
+    environment:
+      # Cleaning images after update
+      - WATCHTOWER_CLEANUP=true
+      # Includes stopped & restarting container
+      - WATCHTOWER_INCLUDE_STOPPED=true
+      - WATCHTOWER_INCLUDE_RESTARTING=true
+    volumes:
+      - ./config.json:/config.json
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: --interval 3600 [container_name]
+    # Fetching new images once every hour
+    # Changing [container_name] with proper container name
